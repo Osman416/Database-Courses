@@ -1,0 +1,101 @@
+CREATE TABLE Departments_T
+                        (DepartmentID	NUMBER(11,0)	NOT NULL,
+                        DepartmentName	VARCHAR2(25)	NOT NULL,
+                        DepartmentLocation	VARCHAR2(25),
+                        DepartmentFloor	VARCHAR2(2),
+CONSTRAINT Departement_PK PRIMARY KEY(DepartmentID));
+
+CREATE TABLE Clients_T
+                        (ClientID	NUMBER(11,0)	NOT NULL,
+                        ClientName	VARCHAR2(10),
+                        ClientAddress   VARCHAR2(25),
+CONSTRAINT Clients_PK PRIMARY KEY(ClientsID),
+
+CREATE TABLE Vendors_T
+                        (VendorID	NUMBER(11,0)	NOT NULL,
+                        VendorName	VARCHAR2(20),
+                        VendorAddress	VARCHAR(25)
+CONSTRAINT Vendors_PK PRIMARY KEY(VendorID));
+
+CREATE TABLE Equipment_T
+                        (EquipmentID	NUMBER(11,0)	NOT NULL,
+                        VendorID	NUMBER(11,0)	NOT NULL,
+                        ProjectID	NUMBER(11,0)	NOT NULL,
+                        EquipmentDescription	TEXT(100)
+                        EquipmentQuantity	NUMBER(12,2),
+                        EquipmentCost		NUMBER(12,2),
+CONSTRAINT Equipment_PK PRIMARY KEY(EquipmentID),
+CONSTRAINT Equipment_FK1 FOREIGN KEY(VendorID) REFERENCES Vendors_T(VendorID),
+CONSTRAINT Equipment_FK2 FOREIGN KEY(ProjectID) REFERENCES Project_T(ProjectID));
+
+CREATE TABLE Employees_T
+                        (EmployeeID	NUMBER(11,0)	NOT NULL,
+	        DepartmentID	NUMBER(11,0)	NOT NULL,
+                        EmployeeName	VARCHAR2(25),
+                        EmployeeAddress	VARCHAR2(25),
+                        EmployeeBirthDate	DATETIME,
+	        EmployeeSIN#	VARCHAR2(25),
+	        EmployeeType	VARCHAR2(25),
+	        EmployeeAnnualSalary	NUMBER(12,2),
+	        EmployeeHealthCoverage	VARCHAR2(2),
+	        EmployeeHourlyRate	NUMBER(11,2),
+CONSTRAINT Employees_PK PRIMARY KEY(EmployeeID),
+CONSTRAINT Employees_FK1 FOREIGN KEY(DepatmentID) REFERENCES Departments_T(DepartmentID));
+
+CREATE TABLE Skills_T
+                        (SkillsID	NUMBER(11,0)	NOT NULL,
+                        SkillDescription	TEXT(100),
+                        EmployeeID	NUMBER(11,0)	NOT NULL,
+CONSTRAINT Skills_PK PRIMARY KEY(ClientsID),
+CONSTRAINT Skills_FK1 FOREIGN KEY(EmployeeID) REFERENCES Employees_T(EmployeeID));
+
+CREATE TABLE Tasks_T
+                        (TaskID	NUMBER(11,0)	NOT NULL,
+                        SkillID	NUMBER(11,0)	NOT NULL,
+                        TaskDescription	TEXT(100),
+	        ProjectID	NUMBBER(11,0)	NOT NULL,
+CONSTRAINT Tasks_PK PRIMARY KEY(TaskID),
+CONSTRAINT Tasks_FK1 FOREIGN KEY(SkillID) REFERENCES Skills_T(SkillID));
+
+CREATE TABLE Projects_T
+                        (ProjectID	NUMBER(11,0)	NOT NULL,
+                        ClientID	NUMBER(11,0)	NOT NULL,
+                        ProjectName	VARCHAR2(25),
+                        ProjectManager	VARCHAR2(20),
+	        ProjectBudget	NUMBER(12,2),
+                        TaskStartDate	DATETIME,
+	        TaskEndDate	DATETIME,
+CONSTRAINT Projects_PK PRIMARY KEY(ProjectID),
+CONSTRAINT Projects_PK PRIMARY KEY(ClientID),
+CONSTRAINT Projects_FK1 FOREIGN KEY(ClientID) REFERENCES Clients_T(ClientID));
+
+
+CREATE TABLE EmployeeDependants_T
+                        (EmployeeDependantID	NUMBER(11,0)	NOT NULL,
+	        EmployeeID	NUMBER(11,0)	NOT NULL,
+                        DependantName	VARCHAR2(25),
+                        DependantAddress	VARCHAR2(25),
+                        DependantBirthDate	DATETIME,
+                        DependantSIN#	NUMBER(10,0),
+CONSTRAINT EmployeeDependants_PK PRIMARY KEY(EmployeeDependantID),
+CONSTRAINT EmployeeDependants_PK PRIMARY KEY(EmployeeID),
+CONSTRAINT EmployeeDependants_FK1 FOREIGN KEY(EmployeeID) REFERENCES Employees_T(EmployeeID));
+
+CREATE TABLE SalariedEmployees_T
+                        (DepartmentID	NUMBER(11,0)	NOT NULL,
+	        EmployeeID	NUMBER(11,0)	NOT NULL,
+                        AnnualSalary	VARCHAR2(25),
+                        HealthCoverage	VARCHAR2(25),
+CONSTRAINT SalariedEmployees_PK PRIMARY KEY(EmployeeID),
+CONSTRAINT SalariedEmployees_PK PRIMARY KEY(DepartmentID),
+CONSTRAINT SalariedEmployees_FK1 FOREIGN KEY(EmployeeID) REFERENCES Employees_T(EmployeeID),
+CONSTRAINT SalariedEmployees_FK2 FOREIGN KEY(DepartmentID) REFERENCES Departments_T(DepartmentID));
+
+CREATE TABLE ConsultantEmployees_T
+                        (DepartmentID	NUMBER(11,0)	NOT NULL,
+	        EmployeeID	NUMBER(11,0)	NOT NULL,
+                        HourlyRate	VARCHAR2(25),
+CONSTRAINT ConsultantEmployees_PK PRIMARY KEY(EmployeeID),
+CONSTRAINT ConsultantEmployees_PK PRIMARY KEY(DepartmentID),
+CONSTRAINT ConsultantEmployees_FK1 FOREIGN KEY(EmployeeID) REFERENCES Employees_T(EmployeeID),
+CONSTRAINT ConsultantEmployees_FK2 FOREIGN KEY(DepartmentID) REFERENCES Departments_T(DepartmentID));

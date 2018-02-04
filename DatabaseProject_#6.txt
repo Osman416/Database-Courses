@@ -1,0 +1,89 @@
+-Create a SELECT query that uses a condition in the WHERE Clause.
+
+/*to create a new, empty table using the schema of another*/
+SELECT *
+INTO newtable
+FROM table1
+WHERE 1=0;
+
+
+-Create a SELECT query that joins at least four tables
+
+/*inner join orders to cutomers*/
+SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+FROM Orders
+INNER JOIN Customers
+ON Orders.CustomerID=Customers.CustomerID;
+
+
+-Create a SELECT query that uses an Aggregate function.
+
+/*to find the average price of all equipment if prices were doubled*/
+USE Equipment.EquipmentCost
+SELECT avg(price * 2)
+FROM Equipment
+
+
+-Create a SELECT query that includes an ORDER BY Clause.
+
+/*selects all customers from the "Clients" table, sorted by the "ClientAddress" and the "ClientName" column*/
+SELECT * FROM Clients
+ORDER BY ClientAddress, ClientName;
+
+
+-Create a SELECT query that includes GROUP BY and HAVING Clauses.
+
+/*to find if any of the Clients have requested more than 2 Projects*/
+SELECT Clients.ClientName, COUNT(Projets.ProjectID) AS NumberOfProjects FROM (Projects
+INNER JOIN Clients
+ON Projects.ClientID=Clients.ClientID)
+GROUP BY LastName
+HAVING COUNT(Projects.ProjectID) > 2
+
+
+-Create a VIEW that is based on at least THREE Tables.
+
+/*view "Current Project List" lists all active products (projects that are not discontinued) from the "Projects" table*/
+CREATE VIEW [Current Project List] AS
+SELECT ProjectID,ProjectName
+FROM Projects
+WHERE Discontinued=No
+
+
+-Create a SELECT query that includes an OUTER JOIN
+/*following SQL statement selects all clients, and all Employees*/
+SELECT Clients.ClientName, Employees.EmployeeID
+FROM Clients
+FULL OUTER JOIN Employees
+ON Clients.ClientID=Employees.ClientID
+ORDER BY Clients.ClientName;
+
+
+-Create a SELECT query that includes a SUB QUERY.
+/*to check employees with an hourly rate less that 25*/
+SELECT * 
+FROM Employees
+WHERE EmployeeID IN (SELECT EmployeeID 
+FROM Employees 
+WHERE HOURLYRATE > 25) ;
+
+-Create a SELECT query that uses a SELF JOIN.
+/* to join employee table to itself as if the table were two tables*/
+SELECT  a.EmployeeID, b.EmployeeName, a.EmployeeAnnualSalary
+FROM Employees a, Employees b
+WHERE a.AnnualSalary < b.AnnualSalary
+
+-Create a SELECT query that uses the CASE conditional structure.
+/*example of a case condtional structure*/
+SELECT * FROM test;
+ a
+---
+ 1
+ 2
+ 3
+SELECT a,
+       CASE WHEN a=1 THEN 'one'
+            WHEN a=2 THEN 'two'
+            ELSE 'other'
+       END
+    FROM test;
